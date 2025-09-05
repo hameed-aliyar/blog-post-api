@@ -1,13 +1,22 @@
 const express = require('express');
+const morgan = require('morgan');
+const postsRouter = require('./routes/postsRouter.js');
+const errorHandler = require('./middleware/errorHandler.js');
 
 require('dotenv').config();
 
 const app = express();
 
+app.use(express.json());
+app.use(morgan('dev'));
 
+app.get('/', (req, res) => {
+    res.send('Welcome to Blog Post API.')
+});
 
-PORT = process.env.PORT;
+app.use('/posts', postsRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`);
+app.use(errorHandler);
+app.listen((process.env.PORT || 4000), () => {
+    console.log(`Server is running on http://localhost:${process.env.PORT || 4000}`);
 });

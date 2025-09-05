@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "first post",
+    "content": "first content",
+    "author": "first author",
+    "timestamp": "2025-09-03T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "second post",
+    "content": "second content",
+    "author": "second author",
+    "timestamp": "2025-09-04T15:30:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "third post",
+    "content": "third content",
+    "author": "third author",
+    "timestamp": "2025-09-05T06:45:00.000Z"
+  }
+]
