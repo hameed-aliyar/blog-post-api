@@ -13,10 +13,31 @@ const getPost = async (req, res, next) => {
     res.send('GET POST - LOGIC PENDING');
 };
 
-// controllers/postController.js
-
 const createPost = async (req, res, next) => {
-    res.send('CREATE POST - LOGIC PENDING'); // Placeholder
+    const { title, content, author } = req.body;
+    try {
+        if (!title || typeof title !== 'string' || title.trim() === '') {
+            return res.status(400).json({ message: 'Validation Error: The "title" field is required.' });
+        }
+        if (!content || typeof content !== 'string' || content.trim() === '') {
+            return res.status(400).json({ message: 'Validation Error: The "content" field is required.' });
+        }
+        const sqlQuery = `
+            INSERT INTO posts (title, content, author) 
+            VALUES ($1, $2, $3) 
+            RETURNING *;
+        `;
+        const values = [
+            title.trim(), 
+            content.trim(), 
+            (author && author.trim()) ? author.trim() : 'Guest' // Handles default author
+        ];
+        const result = await pool.query(sqlQuery, values);
+        const newPost = result.rows[0];
+        res.status(201).json(newPost);
+    } catch (error) {
+        next(error);
+    }
 };
 
 const updatePost = async (req, res) => {
