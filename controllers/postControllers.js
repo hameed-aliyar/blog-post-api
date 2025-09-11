@@ -1,9 +1,13 @@
-const pool = require('../config/db.js');
+const prisma = require('../config/db.js');
 
-const getPosts = async (req, res) => {
+const getPosts = async (req, res, next) => {
     try {
-        const result = await pool.query('SELECT * FROM posts ORDER BY created_at DESC');
-        res.json(result.rows);
+        const posts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+        res.json(posts);
     } catch (error) {
         next(error);
     }
@@ -14,7 +18,7 @@ const getPostById  = async (req, res, next) => {
     try {
         const sqlQuery = 'SELECT * FROM posts WHERE id = $1';
         const values = [id];
-        const result = await pool.query(sqlQuery, values);
+        //const result = await pool.query(sqlQuery, values);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: `Post with ID ${id} not found` });
         }
@@ -44,7 +48,7 @@ const createPost = async (req, res, next) => {
             content.trim(), 
             (author && author.trim()) ? author.trim() : 'Guest' // Handles default author
         ];
-        const result = await pool.query(sqlQuery, values);
+        //const result = await pool.query(sqlQuery, values);
         const newPost = result.rows[0];
         res.status(201).json(newPost);
     } catch (error) {
@@ -81,7 +85,7 @@ const updatePost = async (req, res, next) => {
             author !== undefined ? author.trim() : originalPost.author,
             id
         ];
-        const result = await pool.query(updateQuery, values);
+        //const result = await pool.query(updateQuery, values);
         res.json(result.rows[0]);
     } catch (error) {
         next(error);
@@ -93,7 +97,7 @@ const deletePost = async (req, res, next) => {
     try {
         const sqlQuery = 'DELETE FROM posts WHERE id = $1 RETURNING *;';
         const values = [id];        
-        const result = await pool.query(sqlQuery, values);
+        //const result = await pool.query(sqlQuery, values);
         if (result.rowCount === 0) {
             return res.status(404).json({ message: `Post with ID ${id} not found.` });
         }
