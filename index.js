@@ -6,9 +6,10 @@ const errorHandler = require('./middleware/errorHandler.js');
 require('dotenv').config();
 
 const app = express();
-
+if (process.env.NODE_ENV === 'development') {
+    app.set('json spaces', 2);
+}
 app.use(express.json());
-app.set("json spaces", 2);
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
