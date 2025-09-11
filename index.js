@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(express.json());
+app.set("json spaces", 2);
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
